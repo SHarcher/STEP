@@ -18,6 +18,8 @@ def distance(cities):
             else:
                 city_distance[i][j] = math.sqrt((cities[i][0] - cities[j][0]) ** 2 + (cities[i][1] - cities[j][1]) ** 2)          
     return city_distance
+
+
 def solve(cities,city_distance_):
     city_distance = copy.deepcopy(city_distance_)
 
@@ -30,18 +32,11 @@ def solve(cities,city_distance_):
     while(len(unvisited) != 0):
         next = city_distance[now].index(min(city_distance[now]))
         next_next = city_distance[next].index(min(city_distance[next]))
-        if city_distance[next_next].index(min(city_distance[next_next])) == now:
-            tour.append(next_next)
-            tour.append(next)
-            unvisited.remove(next_next)
-            unvisited.remove(next)
-            for i in range(0,n):
-                city_distance[i][next] = city_distance[i][next_next] = MAX
-        else:
-            unvisited.remove(next)
-            tour.append(next)
-            for i in range(0,n):
-                city_distance[i][next] = MAX
+
+        unvisited.remove(next)
+        tour.append(next)
+        for i in range(0,n):
+            city_distance[i][next] = MAX
         now = next
        
     return tour
@@ -54,10 +49,13 @@ def count_distance(tour,city_distance):
 
 
 if __name__ == '__main__':
-    cities = read_input('input_6.csv')
+    cities = read_input('input_1.csv')
     city_distance = distance(cities)
     tour = solve(cities,city_distance)
+    print(tour)
     sum_distance = count_distance(tour,city_distance)
-    print_tour(tour)
+    begin = tour[0]
+    end = tour[len(tour)-1]
+    sum_distance += math.sqrt((cities[begin][0] - cities[end][0]) ** 2 + (cities[begin][1] - cities[end][1]) ** 2)          
     print(sum_distance)
-    
+
